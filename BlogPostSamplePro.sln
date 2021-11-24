@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2021-11-24", "2021-11-24", "{1629FAC4-E48A-48FE-BE0F-FB5B212D0BF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicCreate", "DynamicCreate\DynamicCreate.csproj", "{F3E0D265-D840-4A27-8F84-B52ACC25369E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F3E0D265-D840-4A27-8F84-B52ACC25369E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3E0D265-D840-4A27-8F84-B52ACC25369E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3E0D265-D840-4A27-8F84-B52ACC25369E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3E0D265-D840-4A27-8F84-B52ACC25369E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F3E0D265-D840-4A27-8F84-B52ACC25369E} = {1629FAC4-E48A-48FE-BE0F-FB5B212D0BF9}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EBB1731C-6967-4C45-AA22-A67A7307F908}
+	EndGlobalSection
+EndGlobal
