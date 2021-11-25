@@ -114,8 +114,6 @@ foreach (Type t in types)
 //    method.Invoke(t, @params);
 //}
 
-
-
 ////获取实现ICar的实例对象
 //var types2 = AppDomain.CurrentDomain.GetAssemblies()
 //                        .SelectMany(a => a.GetTypes().Where(t => t.BaseType == typeof(ICar)))
