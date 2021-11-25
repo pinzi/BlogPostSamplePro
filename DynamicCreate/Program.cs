@@ -98,6 +98,8 @@ foreach (Type t in types)
     IAnimal animal = (IAnimal)ActivatorUtilities.CreateInstance(_serviceProvider, t, @params);
     animal.Cry();
 }
+
+
 //Console.WriteLine("======================2.4接口参数动态调用注入创建写法======================");
 //foreach (Type t in types)
 //{
