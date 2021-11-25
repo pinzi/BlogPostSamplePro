@@ -1,13 +1,16 @@
 ﻿using DynamicCreate;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
+using static System.Formats.Asn1.AsnWriter;
 
-Console.WriteLine("======================常规写法======================");
+Console.WriteLine("======================1.常规写法======================");
 IAnimal animal_Dog = new Dog("旺财");
 animal_Dog.Cry();
 IAnimal animal_Cat = new Cat();
 animal_Cat.Cry();
 
 
-Console.WriteLine("======================动态创建写法======================");
+Console.WriteLine("======================2.动态创建写法======================");
 //获取实现接口IAnimal的实例对象
 var types = AppDomain.CurrentDomain.GetAssemblies()
                         .SelectMany(a => a.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IAnimal))))
@@ -33,6 +36,8 @@ foreach (Type v in types)
 }
 
 //动态创建有参，无参构造函数实例对象
+//常规动态创建写法
+Console.WriteLine("======================2.1常规动态创建写法======================");
 foreach (Type t in types)
 {
     IAnimal animal;
@@ -51,5 +56,95 @@ foreach (Type t in types)
     animal.Cry();
 }
 
+
+//依赖注入创建写法
+Console.WriteLine("======================2.2依赖注入创建写法======================");
+IServiceCollection sc = new ServiceCollection();
+var _serviceProvider = sc.BuildServiceProvider();
+foreach (Type t in types)
+{
+    var constructors = t.GetTypeInfo().DeclaredConstructors
+                    .Where(c => !c.IsStatic && c.IsPublic)
+                    .ToArray();
+
+    if (constructors.Length != 1)
+    {
+        throw new ArgumentException($"entity type :[{t}] found more than one  declared constructor ");
+    }
+    var @params = constructors[0].GetParameters().Select(x => _serviceProvider.GetService(x.ParameterType)).ToArray();
+    if (@params.Length.Equals(1))
+    {
+        @params[0] = "小黑";
+    }
+    IAnimal animal = (IAnimal)Activator.CreateInstance(t, @params)!;
+    animal.Cry();
+}
+Console.WriteLine("======================2.3依赖注入创建写法======================");
+foreach (Type t in types)
+{
+    var constructors = t.GetTypeInfo().DeclaredConstructors
+                    .Where(c => !c.IsStatic && c.IsPublic)
+                    .ToArray();
+
+    if (constructors.Length != 1)
+    {
+        throw new ArgumentException($"entity type :[{t}] found more than one  declared constructor ");
+    }
+    var @params = constructors[0].GetParameters().Select(x => _serviceProvider.GetService(x.ParameterType)).ToArray();
+    if (@params.Length.Equals(1))
+    {
+        @params[0] = "小白";
+    }
+    IAnimal animal = (IAnimal)ActivatorUtilities.CreateInstance(_serviceProvider, t, @params);
+    animal.Cry();
+}
+//Console.WriteLine("======================2.4接口参数动态调用注入创建写法======================");
+//foreach (Type t in types)
+//{
+//    var method = t.GetType().GetMethod("Cry", BindingFlags.Public | BindingFlags.Instance)!;
+//    if (method == null)
+//    {
+//        continue;
+//    }
+//    var @params = method.GetParameters().Select(x => _serviceProvider.GetService(x.ParameterType)).ToArray();
+//    if (@params.Length.Equals(1))
+//    {
+//        @params[0] = "小红";
+//    }
+//    method.Invoke(t, @params);
+//}
+
+
+
+////获取实现ICar的实例对象
+//var types2 = AppDomain.CurrentDomain.GetAssemblies()
+//                        .SelectMany(a => a.GetTypes().Where(t => t.BaseType == typeof(ICar)))
+//                        .ToList();
+//foreach (Type t in types2)
+//{
+//    ICar car;
+//    var constructors = t.GetTypeInfo().DeclaredConstructors
+//                    .Where(c => !c.IsStatic && c.IsPublic)
+//                    .ToArray();
+
+//    if (constructors.Length != 1)
+//    {
+//        throw new ArgumentException($"entity type :[{t}] found more than one  declared constructor ");
+//    }
+
+//    constructors[0].GetParameters().ToList().ForEach(f =>
+//    {
+//        var pt = f.ParameterType;
+//        Console.WriteLine(pt.Name);
+//    });
+
+//    var @params = constructors[0].GetParameters().Select(x => _serviceProvider.GetService(x.ParameterType)).ToArray();
+//    if (@params.Length.Equals(1))
+//    {
+//        @params[0] = "525";
+//    }
+//car = (ICar)Activator.CreateInstance(t, @params)!;
+//car.Drive();
+//}
 
 Console.ReadKey();
