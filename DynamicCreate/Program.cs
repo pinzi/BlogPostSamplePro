@@ -114,7 +114,7 @@ foreach (Type t in types)
     {
         params_ctor[0] = "小黄";
     }
-    IAnimal animal = (IAnimal)ActivatorUtilities.CreateInstance(_serviceProvider, t, params_ctor);
+    var animal = ActivatorUtilities.CreateInstance(_serviceProvider, t, params_ctor);
     var method = t.GetMethod("Cry", BindingFlags.Public | BindingFlags.Instance)!;
     if (method == null)
     {
