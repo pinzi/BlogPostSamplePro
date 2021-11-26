@@ -112,7 +112,7 @@ foreach (Type t in types)
     var params_ctor = constructors[0].GetParameters().Select(x => _serviceProvider.GetService(x.ParameterType)).ToArray();
     if (params_ctor.Length.Equals(1))
     {
-        params_ctor[0] = "小白";
+        params_ctor[0] = "小黄";
     }
     IAnimal animal = (IAnimal)ActivatorUtilities.CreateInstance(_serviceProvider, t, params_ctor);
     var method = t.GetMethod("Cry", BindingFlags.Public | BindingFlags.Instance)!;
