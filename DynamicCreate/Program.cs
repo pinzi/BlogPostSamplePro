@@ -98,12 +98,39 @@ foreach (Type t in types)
     IAnimal animal = (IAnimal)ActivatorUtilities.CreateInstance(_serviceProvider, t, @params);
     animal.Cry();
 }
+Console.WriteLine("======================2.4接口参数动态调用注入创建写法======================");
+foreach (Type t in types)
+{
+    var constructors = t.GetTypeInfo().DeclaredConstructors
+                    .Where(c => !c.IsStatic && c.IsPublic)
+                    .ToArray();
 
-
-//Console.WriteLine("======================2.4接口参数动态调用注入创建写法======================");
-//foreach (Type t in types)
+    if (constructors.Length != 1)
+    {
+        throw new ArgumentException($"entity type :[{t}] found more than one  declared constructor ");
+    }
+    var params_ctor = constructors[0].GetParameters().Select(x => _serviceProvider.GetService(x.ParameterType)).ToArray();
+    if (params_ctor.Length.Equals(1))
+    {
+        params_ctor[0] = "小白";
+    }
+    IAnimal animal = (IAnimal)ActivatorUtilities.CreateInstance(_serviceProvider, t, params_ctor);
+    var method = t.GetMethod("Cry", BindingFlags.Public | BindingFlags.Instance)!;
+    if (method == null)
+    {
+        continue;
+    }
+    method.Invoke(animal, null);
+}
+//var interfaceImplements = Assembly
+//    .GetExecutingAssembly()
+//    .GetTypes()
+//    .Where(item => item.GetInterfaces().Contains(typeof(IAnimal)))
+//    .Select(type => (IAnimal)Activator.CreateInstance(type)!)
+//    .ToList();
+//foreach (var impl in interfaceImplements)
 //{
-//    var method = t.GetType().GetMethod("Cry", BindingFlags.Public | BindingFlags.Instance)!;
+//    var method = impl.GetType().GetMethod("Cry", BindingFlags.Public | BindingFlags.Instance)!;
 //    if (method == null)
 //    {
 //        continue;
@@ -113,7 +140,7 @@ foreach (Type t in types)
 //    {
 //        @params[0] = "小红";
 //    }
-//    method.Invoke(t, @params);
+//    method.Invoke(impl, @params);
 //}
 
 ////获取实现ICar的实例对象
